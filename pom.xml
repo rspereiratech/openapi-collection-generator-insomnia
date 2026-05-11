@@ -14,6 +14,19 @@
     <artifactId>openapi-collection-generator-insomnia</artifactId>
     <name>OpenAPI Collection Generator - Insomnia</name>
     <description>Insomnia collection generator plugin for OpenAPI specifications</description>
+    <url>https://github.com/rspereiratech/openapi-collection-generator-insomnia</url>
+
+    <scm>
+        <connection>scm:git:git://github.com/rspereiratech/openapi-collection-generator-insomnia.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/rspereiratech/openapi-collection-generator-insomnia.git</developerConnection>
+        <url>https://github.com/rspereiratech/openapi-collection-generator-insomnia</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/rspereiratech/openapi-collection-generator-insomnia/issues</url>
+    </issueManagement>
 
     <dependencies>
         <dependency>
@@ -29,11 +42,4 @@
             <artifactId>mockito-core</artifactId>
         </dependency>
     </dependencies>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>central</id>
-            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
 </project>
