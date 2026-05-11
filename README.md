@@ -8,7 +8,6 @@
 ![OpenAPI 3.0](https://img.shields.io/badge/OpenAPI-3.0-6BA539?logo=openapiinitiative&logoColor=white)
 ![Swagger v3](https://img.shields.io/badge/Swagger-v3-85EA2D?logo=swagger&logoColor=black)
 ![Insomnia v4](https://img.shields.io/badge/Insomnia-v4-4000BF?logo=insomnia&logoColor=white)
-![Status: Snapshot](https://img.shields.io/badge/Status-Snapshot-orange)
 [![Donate](https://img.shields.io/badge/Donate-NOWPayments-1A1A1A?logo=bitcoin&logoColor=white)](https://nowpayments.io/donation/rspereiratech)
 
 Insomnia collection generator plugin for OpenAPI specifications — converts
