@@ -37,7 +37,6 @@ deliberately keeps its POM minimal.
 |---|---|---|
 | `openapi-collection-generator-core` | compile | Shared SPI: `CollectionGenerator`, `IdGenerator`, `SchemaExampleGenerator`, `SecurityApplier`, `ServerEnvironmentGenerator`, extension chain, link enricher |
 | `junit-jupiter` | test | Test framework |
-| `assertj-core` | test | Fluent assertions |
 | `mockito-core` | test | Mocking collaborators in unit tests |
 
 Note that the OpenAPI parser (`io.swagger.parser.v3:swagger-parser`) and Jackson

@@ -1,8 +1,17 @@
 # Publishing
 
-This module publishes SNAPSHOT artifacts to the **Sonatype Central Portal**
-on every push to `master`. Release artifacts (signed, tagged versions) are
-not yet automated and will be added in a follow-up.
+This module publishes:
+
+- **SNAPSHOT artifacts** to the Sonatype Central Portal on every push to
+  `master`, via [`snapshot.yml`](../.github/workflows/snapshot.yml).
+- **Release artifacts** (signed, tagged versions) to Maven Central when a
+  `v*` tag is pushed, via [`release.yml`](../.github/workflows/release.yml).
+
+## Coordinates
+
+- **Group ID** — `com.github.rspereiratech`
+- **Artifact ID** — `openapi-collection-generator-insomnia`
+- **Version** — `1.0.0-SNAPSHOT` (current)
 
 ## SNAPSHOT publishing
 
@@ -10,30 +19,15 @@ not yet automated and will be added in a follow-up.
 
 - **Repository URL** —
   <https://central.sonatype.com/repository/maven-snapshots/>
-- **Group ID** — `com.github.rspereiratech`
-- **Artifact ID** — `openapi-collection-generator-insomnia`
-- **Version** — `1.0.0-SNAPSHOT` (current)
+- Public read access (no auth needed to download).
 
-### When SNAPSHOTs are published
-
-The [`snapshot.yml`](../.github/workflows/snapshot.yml) workflow runs on:
+### Triggers
 
 - Every push to `master`.
-- Manual trigger (`workflow_dispatch`).
+- Manual run via `workflow_dispatch`.
 
 The workflow refuses to deploy if the project version does not end with
 `-SNAPSHOT`, to avoid accidentally pushing a release through this pipeline.
-
-### Required secrets
-
-| Secret | Where to get it |
-|---|---|
-| `CENTRAL_USERNAME` | Central Portal → "View Account" → "Generate User Token" → username portion |
-| `CENTRAL_PASSWORD` | Same place — password portion |
-
-Set them in **Settings → Secrets and variables → Actions** on this
-repository. They are also expected by the sibling repositories that
-publish SNAPSHOTs of the parent POM and the core module.
 
 ### Consuming SNAPSHOTs
 
@@ -47,9 +41,39 @@ For **local builds**, either:
   ```bash
   mvn --settings ci-settings.xml clean verify
   ```
-- Or copy the `<profile>` / `<server>` blocks from `ci-settings.xml` into
+- Or copy the `profile` / `server` blocks from `ci-settings.xml` into
   your `~/.m2/settings.xml` so resolution works without the `--settings`
   flag.
+
+## Release publishing
+
+Releases are signed with GPG and published through the Sonatype
+`central-publishing-maven-plugin` configured in the parent's `release`
+profile. The release flow:
+
+1. Bump `<version>` in `pom.xml` from `1.0.0-SNAPSHOT` to e.g. `1.0.0`.
+2. Commit and push to `master`.
+3. Tag and push: `git tag v1.0.0 && git push --tags`.
+4. The [`release.yml`](../.github/workflows/release.yml) workflow runs:
+   - Imports the GPG private key from secrets.
+   - Runs `mvn -Prelease deploy`, which attaches sources + javadoc jars,
+     GPG-signs all artefacts, and uploads through the Central Publishing
+     plugin. With `autoPublish=true` the deployment is promoted to the
+     public release repository without manual intervention.
+5. Bump back to the next `-SNAPSHOT` (e.g. `1.1.0-SNAPSHOT`) in a follow-up
+   commit.
+
+## Required secrets
+
+Configure these in **Settings → Secrets and variables → Actions** on this
+repository.
+
+| Secret | Used by | Where to get it |
+|---|---|---|
+| `CENTRAL_USERNAME` | snapshot + release | Central Portal → View Account → Generate User Token → username |
+| `CENTRAL_PASSWORD` | snapshot + release | Same place — password portion |
+| `GPG_PRIVATE_KEY` | release | `gpg --armor --export-secret-keys <key-id>` |
+| `GPG_PASSPHRASE` | release | Passphrase used when generating the GPG key |
 
 ## Notes and limitations
 
@@ -66,15 +90,6 @@ For **local builds**, either:
   to publish their own SNAPSHOTs before this one's CI passes. Merge the
   upstream change first, wait for its `snapshot.yml` to succeed, then
   rebase this PR.
-
-## Release publishing (planned)
-
-Release artifacts go through a different workflow:
-
-1. GPG-sign the artifacts.
-2. Upload to the Central Portal staging area via the
-   `central-publishing-maven-plugin`.
-3. Promote the staging deployment to the public release repository.
-
-This is not yet automated; a `release.yml` workflow will be added in a
-future change.
+- **Releases are irreversible.** A version published to Maven Central
+  cannot be removed or overwritten. Verify the release locally
+  (`mvn -Prelease verify`) before tagging.
