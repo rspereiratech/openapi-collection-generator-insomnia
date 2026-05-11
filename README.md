@@ -94,6 +94,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). Bug reports and pull requests are
 welcome — please make sure your change belongs in this module and not in a
 sibling one.
 
+All participants are expected to follow the
+[Code of Conduct](CODE_OF_CONDUCT.md).
+
 ## Security
 
 Found a vulnerability? Please follow the process in [SECURITY.md](SECURITY.md)
