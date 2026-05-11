@@ -32,7 +32,7 @@ Insomnia understands."
 ## Where things go
 
 ```
-src/main/java/com/github/rspereiratech/openapi/collection/generator/insomnia/
+src/main/java/io/github/rspereiratech/openapi/collection/generator/insomnia/
 ├── generator/   InsomniaCollectionGenerator (orchestrator)
 ├── builder/     InsomniaRequestBuilder + default impl
 ├── body/        Request-body construction (examples / schema-derived)

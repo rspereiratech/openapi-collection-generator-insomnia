@@ -38,7 +38,7 @@ workspace with environments, folders, and HTTP requests.
 
 ```xml
 <dependency>
-    <groupId>com.github.rspereiratech</groupId>
+    <groupId>io.github.rspereiratech</groupId>
     <artifactId>openapi-collection-generator-insomnia</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 </dependency>

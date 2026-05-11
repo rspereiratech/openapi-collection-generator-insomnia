@@ -3,7 +3,7 @@
 ## Maven coordinates
 
 ```xml
-<groupId>com.github.rspereiratech</groupId>
+<groupId>io.github.rspereiratech</groupId>
 <artifactId>openapi-collection-generator-insomnia</artifactId>
 ```
 
@@ -15,7 +15,7 @@ This module inherits from `openapi-collection-generator-parent`:
 
 ```xml
 <parent>
-    <groupId>com.github.rspereiratech</groupId>
+    <groupId>io.github.rspereiratech</groupId>
     <artifactId>openapi-collection-generator-parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 </parent>
