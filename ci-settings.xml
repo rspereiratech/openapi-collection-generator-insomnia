@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Maven settings used by CI workflows (build, snapshot deploy, CodeQL).
+    Maven settings used by CI workflows (build, snapshot deploy, release).
 
     Adds Sonatype Central Snapshot repository for resolution of SNAPSHOT
-    artifacts of sibling modules (parent, core) and configures the `central`
-    server with credentials read from environment variables.
+    artifacts of sibling modules and configures the `central` server with
+    credentials read from environment variables.
 
     For local builds, either copy the profile/server blocks into your
     ~/.m2/settings.xml, or invoke Maven with the -s ci-settings.xml flag.
