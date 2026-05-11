@@ -35,7 +35,7 @@ jobs:
           cache: maven
 
       - name: Build and test
-        run: mvn -B -ntp clean verify
+        run: mvn -B -ntp --settings ci-settings.xml clean verify
 
       - name: Upload Surefire reports on failure
         if: failure()

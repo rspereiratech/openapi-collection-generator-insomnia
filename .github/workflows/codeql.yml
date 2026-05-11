@@ -49,7 +49,7 @@ jobs:
           queries: security-and-quality
 
       - name: Build with Maven
-        run: mvn -B -ntp -DskipTests clean package
+        run: mvn -B -ntp --settings ci-settings.xml -DskipTests clean package
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3

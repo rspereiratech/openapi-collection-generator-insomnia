@@ -89,6 +89,7 @@ multi-module root) before building this module standalone.
 | [docs/configuration.md](docs/configuration.md) | Build configuration, Maven coordinates, parent POM, dependencies |
 | [docs/architecture.md](docs/architecture.md) | High-level design, collaborator pattern, control flow |
 | [docs/components.md](docs/components.md) | Per-package walk-through |
+| [docs/publishing.md](docs/publishing.md) | SNAPSHOT publishing to Sonatype Central, required secrets |
 
 ## Contributing
 
