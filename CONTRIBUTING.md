@@ -49,7 +49,7 @@ mvn clean verify
 
 ## Tests
 
-- Unit tests use JUnit 5, AssertJ, and Mockito (already on the classpath).
+- Unit tests use JUnit 5 (`org.junit.jupiter.api.Assertions`) and Mockito (already on the classpath). Do not introduce AssertJ.
 - Every new builder/resolver/marker should have at least one test covering
   the happy path and one covering its main fallback branch.
 - Tests should not hit the network or read fixture files outside the test
