@@ -1,5 +1,7 @@
 # openapi-collection-generator-insomnia
 
+[![Build](https://github.com/rspereiratech/openapi-collection-generator-insomnia/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/rspereiratech/openapi-collection-generator-insomnia/actions/workflows/build.yml)
+[![CodeQL](https://github.com/rspereiratech/openapi-collection-generator-insomnia/actions/workflows/codeql.yml/badge.svg?branch=master)](https://github.com/rspereiratech/openapi-collection-generator-insomnia/actions/workflows/codeql.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 ![Java 17+](https://img.shields.io/badge/Java-17%2B-blue)
 ![Maven 3.9+](https://img.shields.io/badge/Maven-3.9%2B-C71A36?logo=apachemaven&logoColor=white)
