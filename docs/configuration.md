@@ -18,15 +18,14 @@ This module inherits from `openapi-collection-generator-parent`:
     <groupId>com.github.rspereiratech</groupId>
     <artifactId>openapi-collection-generator-parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <relativePath/>
 </parent>
 ```
 
-`<relativePath/>` (empty) tells Maven to resolve the parent from the local
-or remote repository instead of looking for it on disk. The parent owns:
+Maven resolves the parent from the local or remote repository (no
+`<relativePath>` override). The parent owns:
 
 - Java version and compiler plugin configuration
-- Managed versions for `swagger-parser`, Jackson, JUnit, AssertJ, Mockito
+- Managed versions for `swagger-parser`, Jackson, JUnit, and Mockito
 - Shared plugin configuration (Surefire, etc.)
 
 If you change Java or dependency versions, do it in the parent — this module

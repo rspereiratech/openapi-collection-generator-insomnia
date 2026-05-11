@@ -9,7 +9,6 @@
         <groupId>com.github.rspereiratech</groupId>
         <artifactId>openapi-collection-generator-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
-        <relativePath/>
     </parent>
 
     <artifactId>openapi-collection-generator-insomnia</artifactId>
