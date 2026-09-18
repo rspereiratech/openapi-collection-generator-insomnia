@@ -34,4 +34,13 @@ public record InsomniaExport(
      * Source identifier written into the export metadata.
      */
     public static final String SOURCE = "openapi-collection-maven-plugin";
+
+    /**
+     * Fixed value written as {@code __export_date}.
+     *
+     * <p>Generated collections are build outputs that are typically committed, so a wall-clock
+     * timestamp here made every build produce a different file. Insomnia does not act on this
+     * field, so it is pinned to the Unix epoch to keep exports reproducible.
+     */
+    public static final String EXPORT_DATE = "1970-01-01T00:00:00.000Z";
 }

@@ -1,11 +1,12 @@
 package io.github.rspereiratech.openapi.collection.generator.insomnia.generator;
 
-import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import io.github.rspereiratech.openapi.collection.generator.core.config.GenerationConfig;
 import io.github.rspereiratech.openapi.collection.generator.core.generator.CollectionGenerationException;
@@ -14,6 +15,7 @@ import io.github.rspereiratech.openapi.collection.generator.core.id.IdGenerator;
 import io.github.rspereiratech.openapi.collection.generator.insomnia.builder.InsomniaRequestBuilder;
 import io.github.rspereiratech.openapi.collection.generator.insomnia.model.InsomniaEnvironment;
 import io.github.rspereiratech.openapi.collection.generator.insomnia.model.InsomniaExport;
+import io.github.rspereiratech.openapi.collection.generator.insomnia.model.InsomniaRequest;
 import io.github.rspereiratech.openapi.collection.generator.insomnia.model.InsomniaRequestGroup;
 import io.github.rspereiratech.openapi.collection.generator.insomnia.model.InsomniaResource;
 import io.github.rspereiratech.openapi.collection.generator.insomnia.model.InsomniaWorkspace;
@@ -90,10 +92,46 @@ public class InsomniaCollectionGenerator implements CollectionGenerator {
 
             return serializer.serialize(new InsomniaExport(
                     InsomniaExport.TYPE, InsomniaExport.FORMAT_VERSION,
-                    Instant.now().toString(), InsomniaExport.SOURCE, resources));
+                    InsomniaExport.EXPORT_DATE, InsomniaExport.SOURCE,
+                    deduplicateRequestIds(resources)));
         } catch (Exception e) {
             throw new CollectionGenerationException("Insomnia generation failed", e);
         }
+    }
+
+    /**
+     * Ensures no two requests share an identifier.
+     *
+     * <p>Request ids are derived from method and path. That is unique for real paths, but
+     * callbacks are emitted under a synthetic {@code /callbacks/<name>} path, so two operations
+     * declaring a callback of the same name would otherwise collide. Only requests need this:
+     * workspace, environment and folder ids are unique by construction, and a request is a leaf
+     * that is never referenced as a {@code parentId}, so renaming one breaks no reference.
+     *
+     * <p>Suffixes are assigned in resource order, which is itself deterministic, so repeated
+     * builds of the same specification produce the same ids.
+     *
+     * @param resources the resources in generation order
+     * @return the same resources, with duplicate request ids disambiguated
+     */
+    private static List<InsomniaResource> deduplicateRequestIds(List<InsomniaResource> resources) {
+        Set<String> seen = new HashSet<>();
+        List<InsomniaResource> result = new ArrayList<>(resources.size());
+        for (InsomniaResource resource : resources) {
+            if (!(resource instanceof InsomniaRequest request) || seen.add(request.id())) {
+                result.add(resource);
+                continue;
+            }
+            String candidate;
+            int suffix = 2;
+            do {
+                candidate = request.id() + "_" + suffix++;
+            } while (!seen.add(candidate));
+            result.add(new InsomniaRequest(candidate, request.type(), request.parentId(),
+                    request.name(), request.method(), request.url(), request.body(),
+                    request.headers(), request.parameters(), request.description()));
+        }
+        return result;
     }
 
     /**

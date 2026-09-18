@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
@@ -53,6 +54,47 @@ class InsomniaCollectionGeneratorTest {
 
     private final InsomniaCollectionGenerator generator =
         new InsomniaCollectionGenerator(id, reqBuilder, serializer, security, serverGen);
+
+    @Test
+    void generate_usesFixedExportDate_soRepeatedBuildsMatch() throws Exception {
+        stubBasics();
+        when(serverGen.generate(any(), anyString())).thenReturn(List.of());
+        OpenAPI api = minimalApi();
+        api.setPaths(new Paths());
+
+        generator.generate(api, config("Pets"));
+
+        ArgumentCaptor<InsomniaExport> captor = ArgumentCaptor.forClass(InsomniaExport.class);
+        verify(serializer).serialize(captor.capture());
+        assertEquals(InsomniaExport.EXPORT_DATE, captor.getValue().exportDate());
+    }
+
+    @Test
+    void generate_disambiguatesRequestIds_whenCallbacksShareAName() throws Exception {
+        stubBasics();
+        when(serverGen.generate(any(), anyString())).thenReturn(List.of());
+        // Every request the builder returns claims the same id, as same-named callbacks on
+        // different operations would once ids became a hash of method + path.
+        when(reqBuilder.build(any(), any(), any(), any(), any())).thenAnswer(inv ->
+            new InsomniaRequest("req_collision", InsomniaRequest.TYPE, "fld_x", "n",
+                "POST", "http://h/p", null, List.of(), List.of(), ""));
+
+        OpenAPI api = minimalApi();
+        Paths paths = new Paths();
+        paths.addPathItem("/a", new PathItem().post(new Operation()));
+        paths.addPathItem("/b", new PathItem().post(new Operation()));
+        api.setPaths(paths);
+
+        generator.generate(api, config("Pets"));
+
+        List<String> ids = captureResources().stream()
+            .filter(r -> r instanceof InsomniaRequest)
+            .map(r -> ((InsomniaRequest) r).id())
+            .toList();
+        assertEquals(2, ids.size());
+        assertEquals(2, Set.copyOf(ids).size(), "request ids must be unique: " + ids);
+        assertTrue(ids.contains("req_collision"));
+    }
 
     private OpenAPI minimalApi() {
         return new OpenAPI().info(new Info().title("Pets API").description("the pets api"));
